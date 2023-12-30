@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+
 const port = process.env.PORT || 5000;
 
 
@@ -25,6 +26,7 @@ async function run() {
       const studentCollection = client.db('devhouse').collection('students');
       const noticeCollection = client.db('devhouse').collection('notice');
       const teachersCollection = client.db('devhouse').collection('teachers');
+      const teacherinfoCollection = client.db('devhouse').collection('teacherinfo');
      
       // console.log("Pinged your deployment. You successfully connected to MongoDB!");
       //Students information section
@@ -66,6 +68,21 @@ async function run() {
         const cursor = teachersCollection.find(query);
         const teacher = await cursor.toArray();
         res.send(teacher);
+  
+      });
+
+      app.get('/teacherinfo', async(req,res)=>{
+        const query = {};
+        const cursor = teacherinfoCollection.find(query);
+        const items = await cursor.toArray();
+        res.send(items);
+  
+      });
+      app.get('/teacherinfo/:id', async(req,res)=>{
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)};
+        const shirts = await teacherinfoCollection.findOne(query);
+        res.send(shirts);
   
       });
 
