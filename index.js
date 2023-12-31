@@ -27,6 +27,7 @@ async function run() {
       const noticeCollection = client.db('devhouse').collection('notice');
       const teachersCollection = client.db('devhouse').collection('teachers');
       const teacherinfoCollection = client.db('devhouse').collection('teacherinfo');
+      const researchCollection = client.db('devhouse').collection('research');
      
       // console.log("Pinged your deployment. You successfully connected to MongoDB!");
       //Students information section
@@ -42,6 +43,21 @@ async function run() {
         console.log("Request", req.body);
         const newUser = req.body;
         const result = await studentCollection.insertOne(newUser);
+        res.send(result);
+      });
+
+      app.get('/research', async(req,res)=>{
+        const query = {};
+        const cursor = researchCollection.find(query);
+        const items = await cursor.toArray();
+        res.send(items);
+  
+      });
+
+      app.post('/research', async(req, res) =>{
+        console.log("Request", req.body);
+        const newUser = req.body;
+        const result = await researchCollection.insertOne(newUser);
         res.send(result);
       });
 
