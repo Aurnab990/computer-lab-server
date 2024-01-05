@@ -47,6 +47,12 @@ async function run() {
         const result = await studentCollection.insertOne(newUser);
         res.send(result);
       });
+      app.delete('/students/:id', async(req, res) =>{
+      const id = (req.params.id);
+      const query = {_id:new ObjectId(id)};
+      const result = await studentCollection.deleteOne(query);
+      res.send(result);
+    });
 
       app.get('/research', async(req,res)=>{
         const query = {};
@@ -148,6 +154,24 @@ async function run() {
       const result = await teacherinfoCollection.deleteOne(query);
       res.send(result);
     });
+    app.put('/teacherinfo/:id', async(req, res) =>{
+      const id = req.params.id;
+      const updateItem = req.body;
+      const query = {_id:new ObjectId(id)};
+      const options= { upsert: true};
+      const updatedDoc ={
+        $set: {
+          name: updateItem.name,
+          title: updateItem.title,
+          
+        }
+      };
+      // console.log(updatedDoc);
+      const result = await teacherinfoCollection.updateOne(query, updatedDoc, options);
+      
+      res.send(result);
+      
+    })
 
       app.post('/teachers', async(req, res) =>{
         console.log("Request", req.body);
