@@ -28,6 +28,8 @@ async function run() {
       const teachersCollection = client.db('devhouse').collection('teachers');
       const teacherinfoCollection = client.db('devhouse').collection('teacherinfo');
       const researchCollection = client.db('devhouse').collection('research');
+      const successCollection = client.db('devhouse').collection('success');
+      const eventsCollection = client.db('devhouse').collection('events');
      
       // console.log("Pinged your deployment. You successfully connected to MongoDB!");
       //Students information section
@@ -78,6 +80,39 @@ async function run() {
         res.send(result);
       });
 
+      //Success
+      app.get('/success', async(req,res)=>{
+        const query = {};
+        const cursor = successCollection.find(query);
+        const items = await cursor.toArray();
+        res.send(items);
+  
+      });
+
+      app.post('/success', async(req, res) =>{
+        console.log("Request", req.body);
+        const newSuccess = req.body;
+        const result = await successCollection.insertOne(newSuccess);
+        res.send(result);
+      });
+
+      //Events
+      app.get('/events', async(req,res)=>{
+        const query = {};
+        const cursor = eventsCollection.find(query);
+        const items = await cursor.toArray();
+        res.send(items);
+  
+      });
+
+      app.post('/events', async(req, res) =>{
+        console.log("Request", req.body);
+        const newEvents = req.body;
+        const result = await eventsCollection.insertOne(newEvents);
+        res.send(result);
+      });
+
+
       //Teachers Info API
       app.get('/teachers', async(req,res)=>{
         const query = {};
@@ -85,6 +120,12 @@ async function run() {
         const teacher = await cursor.toArray();
         res.send(teacher);
   
+      });
+      app.post('/teacherinfo', async(req, res) =>{
+        console.log("Request", req.body);
+        const newEvents = req.body;
+        const result = await teacherinfoCollection.insertOne(newEvents);
+        res.send(result);
       });
 
       app.get('/teacherinfo', async(req,res)=>{
@@ -101,6 +142,12 @@ async function run() {
         res.send(shirts);
   
       });
+      app.delete('/teacherinfo/:id', async(req, res) =>{
+      const id = (req.params.id);
+      const query = {_id:new ObjectId(id)};
+      const result = await teacherinfoCollection.deleteOne(query);
+      res.send(result);
+    });
 
       app.post('/teachers', async(req, res) =>{
         console.log("Request", req.body);
