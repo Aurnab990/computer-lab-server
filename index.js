@@ -85,6 +85,12 @@ async function run() {
         const result = await noticeCollection.insertOne(newTeacher);
         res.send(result);
       });
+      app.delete('/notice/:id', async(req, res) =>{
+        const id = (req.params.id);
+        const query = {_id:new ObjectId(id)};
+        const result = await noticeCollection.deleteOne(query);
+        res.send(result);
+      });
 
       //Success
       app.get('/success', async(req,res)=>{
