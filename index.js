@@ -107,6 +107,12 @@ async function run() {
         const result = await successCollection.insertOne(newSuccess);
         res.send(result);
       });
+      app.delete('/success/:id', async(req, res) =>{
+        const id = (req.params.id);
+        const query = {_id:new ObjectId(id)};
+        const result = await successCollection.deleteOne(query);
+        res.send(result);
+      });
 
       //Events
       app.get('/events', async(req,res)=>{
@@ -121,6 +127,12 @@ async function run() {
         console.log("Request", req.body);
         const newEvents = req.body;
         const result = await eventsCollection.insertOne(newEvents);
+        res.send(result);
+      });
+      app.delete('/events/:id', async(req, res) =>{
+        const id = (req.params.id);
+        const query = {_id:new ObjectId(id)};
+        const result = await eventsCollection.deleteOne(query);
         res.send(result);
       });
 
